@@ -1,0 +1,10 @@
+<% if @memos %>
+  <ul class="memo-list">
+    <% @memos.each do |memo| %>
+      <li><a href="/memos/<%= memo[:id] %>"><%= memo[:title] %></a></li>
+    <% end %>
+  </ul>
+<% end %>
+<div class="button-area">
+  <a href="/memos/new" class="button-new">作成</a>
+</div>

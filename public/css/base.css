@@ -1,0 +1,125 @@
+@charset "UTF-8";
+
+body {
+  margin: 0;
+  padding: 0 12px;
+  font: 100%/1.6 sans-serif;
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+button {
+  font: 100%/1.6 sans-serif;
+  box-sizing: border-box;
+}
+
+.memo-form {
+  max-width: 480px;
+  margin: auto;
+}
+
+.memo-form>input[type=text],
+.memo-form>textarea {
+  background: #ffe;
+  border: 1px solid #aaa;
+  padding: 4px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.memo-form>textarea {
+  min-height: 160px;
+}
+
+.memo-body {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.app_name {
+  margin: 0 0 24px;
+  padding: 0;
+  font-size: 200%;
+}
+
+.app_name>a {
+  text-decoration: none;
+  color: #444;
+}
+
+.app_name>a:hover {
+  opacity: .8;
+}
+
+.content {
+  max-width: 480px;
+  margin: 12px auto;
+  padding: 24px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 0px 4px #bbb;
+}
+
+.memo-list {
+  padding-inline-start: 1em;
+}
+
+.memo-list li {
+  line-height: 2;
+}
+
+.button-area {
+  margin: 24px 0;
+  text-align: center;
+}
+
+.button-area a+a,
+.button-area button+a,
+.button-area button+button,
+.button-area a+form {
+  margin-left: 24px;
+}
+
+.button-area a:hover,
+.button-area button:hover {
+  opacity: .8;
+}
+
+.button-new,
+.button-save,
+.button-edit,
+.button-delete,
+.button-cancel {
+  cursor: pointer;
+  display: inline-block;
+  padding: 4px 24px;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.button-new {
+  background: #23985a
+}
+
+.button-edit {
+  background: #fc962c
+}
+
+.button-save {
+  background: #417aed
+}
+
+.button-delete {
+  background: #e33d34
+}
+
+.button-cancel {
+  background: #e8e8e8;
+  color: initial
+}
+
+.inline {
+  display: inline
+}
