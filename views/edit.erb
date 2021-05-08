@@ -1,6 +1,6 @@
-<form action="/memos/<%= @memo[:id] %>" method="POST" class="memo-form">
-  <input type="text" value="<%= @memo[:title] %>" placeholder="メモのタイトル">
-  <textarea placeholder="メモの内容"><%= @memo[:body] %></textarea>
+<form action="/memos/<%= @memo['id'] %>" method="POST" class="memo-form">
+  <input type="text" value="<%= @memo['title'] %>" placeholder="メモのタイトル">
+  <textarea placeholder="メモの内容"><%= @memo['body'] %></textarea>
   <div class="button-area">
     <button type="button" onclick="history.back()" class="button-cancel">戻る</button>
     <button class="button-save" onclick="return confirm('この内容で保存しますか？')">保存</button>

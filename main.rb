@@ -2,21 +2,17 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
+require 'json'
 
 APP_NAME = 'メモアプリ'
 
 before do
-  @memos = [
-    { id: '1', title: 'メモ1', body: "メモの内容\nメモの内容\nメモの内容" },
-    { id: '2', title: 'メモ2', body: "メモの内容\nメモの内容\nメモの内容" },
-    { id: '3', title: 'メモ3', body: "メモの内容\nメモの内容\nメモの内容" },
-    { id: '4', title: 'メモ4', body: "メモの内容\nメモの内容\nメモの内容" }
-  ]
+  File.open("storages/memos.json") { |json| @memos = JSON.load(json) }
 end
 
 helpers do
-  def find_memo(memos, params_id)
-    memos.find { |memo| memo[:id] == params_id }
+  def find_memo(memos, params)
+    memos.find { |memo| memo['id'] == params['id'].to_i }
   end
 
   def build_page_title(page_title)
@@ -25,22 +21,22 @@ helpers do
 end
 
 get '/' do
+  redirect '/memos'
+end
+
+get '/memos/?' do
   @page_title = build_page_title(nil)
   erb :index
 end
 
-get '/memos/?' do
-  redirect '/'
-end
-
 get '/memos/new/?' do
   @page_title = build_page_title('メモの作成')
-  @memo = { id: '', title: '', body: '' }
+  @memo = { 'id' => '', 'title' => '', 'body' => '' }
   erb :edit
 end
 
 get '/memos/:id/?' do
-  if (@memo = find_memo(@memos, params[:id]))
+  if (@memo = find_memo(@memos, params))
     @page_title = build_page_title('メモの詳細')
     erb :show
   else
@@ -50,7 +46,7 @@ get '/memos/:id/?' do
 end
 
 get '/memos/:id/edit/?' do
-  if (@memo = find_memo(@memos, params[:id]))
+  if (@memo = find_memo(@memos, params))
     @page_title = build_page_title('メモの変更')
     erb :edit
   else
