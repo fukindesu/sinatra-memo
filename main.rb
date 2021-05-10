@@ -7,12 +7,20 @@ require 'json'
 APP_NAME = 'メモアプリ'
 
 before do
-  File.open("storages/memos.json") { |json| @memos = JSON.load(json) }
+  @memos = load_memos
 end
 
 helpers do
+  def load_memos
+    memos = []
+    Dir.glob('storages/*') do |file|
+      File.open(file, 'r') { |json| memos << JSON.load(json) }
+    end
+    memos.sort_by { |memo| memo['id'] }
+  end
+
   def find_memo(memos, params)
-    memos.find { |memo| memo['id'] == params['id'].to_i }
+    memos.find { |memo| memo['id'].to_s == params['id'] }
   end
 
   def build_page_title(page_title)
