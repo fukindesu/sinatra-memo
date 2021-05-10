@@ -7,13 +7,13 @@ require 'json'
 APP_NAME = 'メモアプリ'
 
 before do
-  @memos = load_memos
+  @memos = load_memos_from_directory
 end
 
 helpers do
-  def load_memos
+  def load_memos_from_directory
     memos = []
-    Dir.glob('storages/*') do |file|
+    Dir.glob('memo_files/*') do |file|
       memos << JSON.parse(File.read(file))
     end
     memos.sort_by { |memo| memo['id'] }
