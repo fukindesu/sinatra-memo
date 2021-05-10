@@ -14,7 +14,7 @@ helpers do
   def load_memos
     memos = []
     Dir.glob('storages/*') do |file|
-      File.open(file, 'r') { |json| memos << JSON.load(json) }
+      memos << JSON.parse(File.read(file))
     end
     memos.sort_by { |memo| memo['id'] }
   end
