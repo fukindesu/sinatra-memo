@@ -6,10 +6,6 @@ require 'json'
 
 APP_NAME = 'メモアプリ'
 
-before do
-  @memos = load_memos_from_directory
-end
-
 helpers do
   def load_memos_from_directory
     memos = []
@@ -19,7 +15,8 @@ helpers do
     memos.sort_by { |memo| memo['id'] }
   end
 
-  def find_memo(memos, params)
+  def find_memo
+    memos = load_memos_from_directory
     memos.find { |memo| memo['id'].to_s == params['id'] }
   end
 
@@ -33,18 +30,19 @@ get '/' do
 end
 
 get '/memos/?' do
+  @memos = load_memos_from_directory
   @page_title = build_page_title(nil)
   erb :index
 end
 
 get '/memos/new/?' do
-  @page_title = build_page_title('メモの作成')
   @memo = { 'id' => '', 'title' => '', 'body' => '' }
+  @page_title = build_page_title('メモの作成')
   erb :edit
 end
 
 get '/memos/:id/?' do
-  if (@memo = find_memo(@memos, params))
+  if (@memo = find_memo)
     @page_title = build_page_title('メモの詳細')
     erb :show
   else
@@ -54,7 +52,7 @@ get '/memos/:id/?' do
 end
 
 get '/memos/:id/edit/?' do
-  if (@memo = find_memo(@memos, params))
+  if (@memo = find_memo)
     @page_title = build_page_title('メモの変更')
     erb :edit
   else
