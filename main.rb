@@ -26,6 +26,11 @@ helpers do
     memos.find { |memo| memo['id'].to_s == params['id'] }
   end
 
+  def delete_memo(params)
+    file_path = "memo_files/#{params['id']}.json"
+    FileTest.exist?(file_path) && File.delete(file_path)
+  end
+
   def build_page_title(page_title)
     [page_title, APP_NAME].compact.join(' | ')
   end
@@ -81,6 +86,11 @@ get '/memos/:id/edit/?' do
     status 404
     erb :error
   end
+end
+
+delete '/memos/:id/?' do
+  delete_memo(params)
+  redirect to('/memos')
 end
 
 get '/*' do
