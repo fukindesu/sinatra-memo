@@ -41,7 +41,7 @@ helpers do
 end
 
 get '/' do
-  redirect '/memos'
+  redirect to('/memos')
 end
 
 get '/memos/?' do
