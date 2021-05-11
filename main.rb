@@ -3,11 +3,12 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
+require 'erb'
 
 APP_NAME = 'メモアプリ'
 
 helpers do
-  def load_memos_from_directory
+  def load_memo_files_sorted_by_id
     memos = []
     Dir.glob('memo_files/*') do |file|
       memos << JSON.parse(File.read(file))
@@ -15,13 +16,22 @@ helpers do
     memos.sort_by { |memo| memo['id'] }
   end
 
+  def fetch_latest_next_id
+    memos = load_memo_files_sorted_by_id
+    memos.max_by { |memo| memo['id'] }['id'].next
+  end
+
   def find_memo
-    memos = load_memos_from_directory
+    memos = load_memo_files_sorted_by_id
     memos.find { |memo| memo['id'].to_s == params['id'] }
   end
 
   def build_page_title(page_title)
     [page_title, APP_NAME].compact.join(' | ')
+  end
+
+  def h(text)
+    ERB::Util.h(text)
   end
 end
 
@@ -30,15 +40,27 @@ get '/' do
 end
 
 get '/memos/?' do
-  @memos = load_memos_from_directory
+  @memos = load_memo_files_sorted_by_id
   @page_title = build_page_title(nil)
   erb :index
 end
 
 get '/memos/new/?' do
-  @memo = { 'id' => '', 'title' => '', 'body' => '' }
   @page_title = build_page_title('メモの作成')
-  erb :edit
+  erb :new
+end
+
+post '/memos' do
+  id = fetch_latest_next_id
+  File.open("memo_files/#{id}.json", 'w') do |file|
+    memo = {
+      'id' => id,
+      'title' => h(params['title']),
+      'body' => h(params['body'])
+    }
+    JSON.dump(memo, file)
+  end
+  redirect to('/memos')
 end
 
 get '/memos/:id/?' do
