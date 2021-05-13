@@ -18,7 +18,7 @@ module MemoUtils
     memos.sort_by { |memo| memo['created_at'] }
   end
 
-  def find_memo
+  def find_memo(params)
     memos = load_memo_files
     memos.find { |memo| memo['id'].to_s == params['id'] }
   end
@@ -89,7 +89,7 @@ post '/memos' do
 end
 
 get '/memos/:id/?' do
-  if (@memo = find_memo)
+  if (@memo = find_memo(params))
     @page_title = build_page_title('メモの詳細')
     erb :show
   else
@@ -103,7 +103,7 @@ patch '/memos/:id/?' do
 end
 
 get '/memos/:id/edit/?' do
-  if (@memo = find_memo)
+  if (@memo = find_memo(params))
     @page_title = build_page_title('メモの変更')
     erb :edit
   else
