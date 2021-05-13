@@ -9,7 +9,7 @@ require 'securerandom'
 
 APP_NAME = 'メモアプリ'
 
-helpers do
+module MemoUtils
   def load_memo_files
     memos = []
     Dir.glob('memo_files/*') do |file|
@@ -54,6 +54,10 @@ helpers do
     file_path = "memo_files/#{params['id']}.json"
     FileTest.exist?(file_path) && File.delete(file_path)
   end
+end
+
+helpers do
+  include MemoUtils
 
   def build_page_title(page_title)
     [page_title, APP_NAME].compact.join(' | ')
