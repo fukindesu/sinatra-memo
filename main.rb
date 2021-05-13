@@ -4,7 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 require 'erb'
-require 'time' # ISO8601形式で保存するため
+require 'time'
 require 'securerandom'
 
 APP_NAME = 'メモアプリ'
@@ -58,13 +58,10 @@ end
 
 helpers do
   include MemoUtils
+  include ERB::Util
 
   def build_page_title(page_title)
     [page_title, APP_NAME].compact.join(' | ')
-  end
-
-  def h(text)
-    ERB::Util.h(text)
   end
 end
 
