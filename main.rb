@@ -4,7 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 require 'erb'
-require 'time'
+require 'time' # ISO8601形式で保存するため
 require 'securerandom'
 
 APP_NAME = 'メモアプリ'
@@ -30,7 +30,21 @@ helpers do
         'id' => id,
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
         'body' => h(params['body']),
-        'created_at' => Time.now.iso8601
+        'created_at' => Time.now.iso8601,
+        'updated_at' => Time.now.iso8601
+      }
+      JSON.dump(memo, file)
+    end
+  end
+
+  def update_memo(params)
+    File.open("memo_files/#{params['id']}.json", 'w') do |file|
+      memo = {
+        'id' => params['id'],
+        'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
+        'body' => h(params['body']),
+        'created_at' => params['created_at'],
+        'updated_at' => Time.now.iso8601
       }
       JSON.dump(memo, file)
     end
@@ -78,6 +92,11 @@ get '/memos/:id/?' do
     status 404
     erb :error
   end
+end
+
+patch '/memos/:id/?' do
+  update_memo(params)
+  redirect to('/memos')
 end
 
 get '/memos/:id/edit/?' do

@@ -1,6 +1,8 @@
 <form action="/memos/<%= @memo['id'] %>" method="POST" class="memo-form">
-  <input type="text" value="<%= @memo['title'] %>" placeholder="メモのタイトル">
-  <textarea placeholder="メモの内容"><%= @memo['body'] %></textarea>
+  <input type="hidden" name="_method" value="patch">
+  <input type="hidden" name="created_at" value="<%= @memo['created_at'] %>">
+  <input type="text" name="title" value="<%= @memo['title'] %>" placeholder="メモのタイトル（省略時は「無題」が入ります）">
+  <textarea name="body" placeholder="メモの内容"><%= @memo['body'] %></textarea>
   <div class="button-area">
     <button type="button" onclick="history.back()" class="button-cancel">戻る</button>
     <button class="button-save" onclick="return confirm('この内容で保存しますか？')">保存</button>
