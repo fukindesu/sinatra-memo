@@ -5,6 +5,7 @@ require 'sinatra/reloader'
 require 'json'
 require 'erb'
 require 'time'
+require 'securerandom'
 
 APP_NAME = 'メモアプリ'
 
@@ -15,11 +16,6 @@ helpers do
       memos << JSON.parse(File.read(file))
     end
     memos.sort_by { |memo| memo['created_at'] }
-  end
-
-  def fetch_latest_next_id
-    memos = load_memo_files
-    memos.max_by { |memo| memo['id'] }['id'].next
   end
 
   def find_memo
@@ -57,7 +53,7 @@ get '/memos/new/?' do
 end
 
 post '/memos' do
-  id = fetch_latest_next_id
+  id = SecureRandom.hex(10)
   File.open("memo_files/#{id}.json", 'w') do |file|
     memo = {
       'id' => id,
