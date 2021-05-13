@@ -90,7 +90,6 @@ get '/memos/:id/?' do
     erb :show
   else
     status 404
-    erb :error
   end
 end
 
@@ -105,7 +104,6 @@ get '/memos/:id/edit/?' do
     erb :edit
   else
     status 404
-    erb :error
   end
 end
 
@@ -114,8 +112,7 @@ delete '/memos/:id/?' do
   redirect to('/memos')
 end
 
-get '/*' do
+not_found do
   @page_title = build_page_title('ページが見つかりませんでした')
-  status 404
   erb :error
 end
