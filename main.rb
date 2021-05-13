@@ -23,7 +23,7 @@ module MemoUtils
     memos.find { |memo| memo['id'].to_s == params['id'] }
   end
 
-  def save_memo(params)
+  def create_memo(params)
     id = SecureRandom.hex(10)
     File.open("memo_files/#{id}.json", 'w') do |file|
       memo = {
@@ -84,7 +84,7 @@ get '/memos/new/?' do
 end
 
 post '/memos' do
-  save_memo(params)
+  create_memo(params)
   redirect to('/memos')
 end
 
