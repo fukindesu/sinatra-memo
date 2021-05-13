@@ -24,7 +24,7 @@ module MemoUtils
   end
 
   def create_memo(params)
-    id = SecureRandom.hex(10)
+    id = SecureRandom.uuid
     File.open("memo_files/#{id}.json", 'w') do |file|
       memo = {
         'id' => id,
