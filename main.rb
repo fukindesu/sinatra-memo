@@ -4,25 +4,26 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 require 'erb'
+require 'time'
 
 APP_NAME = 'メモアプリ'
 
 helpers do
-  def load_memo_files_sorted_by_id
+  def load_memo_files
     memos = []
     Dir.glob('memo_files/*') do |file|
       memos << JSON.parse(File.read(file))
     end
-    memos.sort_by { |memo| memo['id'] }
+    memos.sort_by { |memo| memo['created_at'] }
   end
 
   def fetch_latest_next_id
-    memos = load_memo_files_sorted_by_id
+    memos = load_memo_files
     memos.max_by { |memo| memo['id'] }['id'].next
   end
 
   def find_memo
-    memos = load_memo_files_sorted_by_id
+    memos = load_memo_files
     memos.find { |memo| memo['id'].to_s == params['id'] }
   end
 
@@ -45,7 +46,7 @@ get '/' do
 end
 
 get '/memos/?' do
-  @memos = load_memo_files_sorted_by_id
+  @memos = load_memo_files
   @page_title = build_page_title(nil)
   erb :index
 end
@@ -61,7 +62,8 @@ post '/memos' do
     memo = {
       'id' => id,
       'title' => h(params['title']),
-      'body' => h(params['body'])
+      'body' => h(params['body']),
+      'create_at' => Time.now.iso8601
     }
     JSON.dump(memo, file)
   end
