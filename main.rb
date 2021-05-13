@@ -23,6 +23,19 @@ helpers do
     memos.find { |memo| memo['id'].to_s == params['id'] }
   end
 
+  def save_memo(params)
+    id = SecureRandom.hex(10)
+    File.open("memo_files/#{id}.json", 'w') do |file|
+      memo = {
+        'id' => id,
+        'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
+        'body' => h(params['body']),
+        'created_at' => Time.now.iso8601
+      }
+      JSON.dump(memo, file)
+    end
+  end
+
   def delete_memo(params)
     file_path = "memo_files/#{params['id']}.json"
     FileTest.exist?(file_path) && File.delete(file_path)
@@ -53,16 +66,7 @@ get '/memos/new/?' do
 end
 
 post '/memos' do
-  id = SecureRandom.hex(10)
-  File.open("memo_files/#{id}.json", 'w') do |file|
-    memo = {
-      'id' => id,
-      'title' => h(params['title']),
-      'body' => h(params['body']),
-      'create_at' => Time.now.iso8601
-    }
-    JSON.dump(memo, file)
-  end
+  save_memo(params)
   redirect to('/memos')
 end
 
