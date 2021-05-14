@@ -100,8 +100,12 @@ get '/memos/:id/?' do
 end
 
 patch '/memos/:id/?' do
-  update_memo(params)
-  redirect to('/memos')
+  if find_memo(params['id'])
+    update_memo(params)
+    redirect to("/memos/#{params['id']}")
+  else
+    status 404
+  end
 end
 
 get '/memos/:id/edit/?' do
@@ -114,8 +118,12 @@ get '/memos/:id/edit/?' do
 end
 
 delete '/memos/:id/?' do
-  delete_memo(params['id'])
-  redirect to('/memos')
+  if find_memo(params['id'])
+    delete_memo(params['id'])
+    redirect to('/memos')
+  else
+    status 404
+  end
 end
 
 not_found do
