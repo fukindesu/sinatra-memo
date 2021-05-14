@@ -29,30 +29,25 @@ module MemoUtils
   end
 
   def create_memo
-    prepared_id = SecureRandom.uuid
-    file_path = id_to_file_path(prepared_id)
+    create_or_update_memo(creation: true)
+  end
+
+  def create_or_update_memo(creation:)
+    memo_id = (creation ? SecureRandom.uuid : params['id'])
+    file_path = id_to_file_path(memo_id)
     File.open(file_path, 'w') do |file|
       memo = {
-        'id' => prepared_id,
+        'id' => memo_id,
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
         'body' => h(params['body']),
-        'created_at' => Time.now.iso8601
+        'created_at' => (creation ? Time.now.iso8601 : params['created_at'])
       }
       JSON.dump(memo, file)
     end
   end
 
   def update_memo
-    file_path = id_to_file_path(params['id'])
-    File.open(file_path, 'w') do |file|
-      memo = {
-        'id' => params['id'],
-        'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
-        'body' => h(params['body']),
-        'created_at' => params['created_at']
-      }
-      JSON.dump(memo, file)
-    end
+    create_or_update_memo(creation: false)
   end
 
   def delete_memo
