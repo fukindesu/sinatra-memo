@@ -21,7 +21,7 @@ module MemoUtils
 
   def find_memo(params)
     memos = load_memo_files
-    memos.find { |memo| memo['id'].to_s == params['id'] }
+    memos.find { |memo| memo['id'] == params['id'] }
   end
 
   def create_memo(params)
