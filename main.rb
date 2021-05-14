@@ -99,19 +99,19 @@ get '/memos/:id/?' do
   end
 end
 
-patch '/memos/:id/?' do
-  if find_memo(params['id'])
-    update_memo(params)
-    redirect to("/memos/#{params['id']}")
+get '/memos/:id/edit/?' do
+  if (@memo = find_memo(params['id']))
+    @page_title = build_page_title('メモの変更')
+    erb :edit
   else
     status 404
   end
 end
 
-get '/memos/:id/edit/?' do
-  if (@memo = find_memo(params['id']))
-    @page_title = build_page_title('メモの変更')
-    erb :edit
+patch '/memos/:id/?' do
+  if find_memo(params['id'])
+    update_memo(params)
+    redirect to("/memos/#{params['id']}")
   else
     status 404
   end
