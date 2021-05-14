@@ -24,8 +24,8 @@ module MemoUtils
     JSON.parse(File.read(file_path)) if FileTest.exist?(file_path)
   end
 
-  def id_to_file_path(id)
-    "#{STORAGE_PATH}/#{id}.json"
+  def memo_id_to_file_path(memo_id)
+    "#{STORAGE_PATH}/#{memo_id}.json"
   end
 
   def create_memo
