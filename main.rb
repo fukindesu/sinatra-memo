@@ -20,12 +20,12 @@ module MemoUtils
   end
 
   def find_memo(params)
-    file_path = to_file_path(params)
+    file_path = id_to_file_path(params['id'])
     JSON.parse(File.read(file_path)) if FileTest.exist?(file_path)
   end
 
-  def to_file_path(params)
-    "#{STORAGE_PATH}/#{params['id']}.json"
+  def id_to_file_path(id)
+    "#{STORAGE_PATH}/#{id}.json"
   end
 
   def create_memo(params)
