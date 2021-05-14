@@ -75,14 +75,14 @@ get '/memos/?' do
   erb :index
 end
 
-get '/memos/new/?' do
-  @page_title = build_page_title('メモの作成')
-  erb :new
-end
-
 post '/memos' do
   create_memo(params)
   redirect to('/memos')
+end
+
+get '/memos/new/?' do
+  @page_title = build_page_title('メモの作成')
+  erb :new
 end
 
 get '/memos/:id/?' do
