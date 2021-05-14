@@ -27,7 +27,7 @@ module MemoUtils
     memo_id = SecureRandom.uuid
     File.open("memo_files/#{memo_id}.json", 'w') do |file|
       memo = {
-        'id' => id,
+        'id' => memo_id,
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
         'body' => h(params['body']),
         'created_at' => Time.now.iso8601,
