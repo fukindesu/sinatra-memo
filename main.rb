@@ -13,7 +13,7 @@ STORAGE_PATH = 'memo_files'
 module MemoUtils
   def load_memo_files
     memos = []
-    Dir.glob("#{STORAGE_PATH}/*json") do |filename|
+    Dir.glob("#{STORAGE_PATH}/*.json") do |filename|
       memos << JSON.parse(File.read(filename))
     end
     memos.sort_by { |memo| memo['created_at'] }
