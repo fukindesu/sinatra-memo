@@ -19,8 +19,8 @@ module MemoUtils
     memos.sort_by { |memo| memo['created_at'] }
   end
 
-  def find_memo(params_id)
-    file_path = id_to_file_path(params_id)
+  def find_memo
+    file_path = id_to_file_path(params['id'])
     JSON.parse(File.read(file_path)) if FileTest.exist?(file_path)
   end
 
@@ -28,7 +28,7 @@ module MemoUtils
     "#{STORAGE_PATH}/#{id}.json"
   end
 
-  def create_memo(params)
+  def create_memo
     prepared_id = SecureRandom.uuid
     file_path = id_to_file_path(prepared_id)
     File.open(file_path, 'w') do |file|
@@ -42,7 +42,7 @@ module MemoUtils
     end
   end
 
-  def update_memo(params)
+  def update_memo
     file_path = id_to_file_path(params['id'])
     File.open(file_path, 'w') do |file|
       memo = {
@@ -55,8 +55,8 @@ module MemoUtils
     end
   end
 
-  def delete_memo(params_id)
-    file_path = id_to_file_path(params_id)
+  def delete_memo
+    file_path = id_to_file_path(params['id'])
     FileTest.exist?(file_path) && File.delete(file_path)
   end
 end
@@ -81,7 +81,7 @@ get '/memos/?' do
 end
 
 post '/memos' do
-  create_memo(params)
+  create_memo
   redirect to('/memos')
 end
 
@@ -91,7 +91,7 @@ get '/memos/new/?' do
 end
 
 get '/memos/:id/?' do
-  if (@memo = find_memo(params['id']))
+  if (@memo = find_memo)
     @page_title = build_page_title('メモの詳細')
     erb :show
   else
@@ -100,7 +100,7 @@ get '/memos/:id/?' do
 end
 
 get '/memos/:id/edit/?' do
-  if (@memo = find_memo(params['id']))
+  if (@memo = find_memo)
     @page_title = build_page_title('メモの変更')
     erb :edit
   else
@@ -109,8 +109,8 @@ get '/memos/:id/edit/?' do
 end
 
 patch '/memos/:id/?' do
-  if find_memo(params['id'])
-    update_memo(params)
+  if find_memo
+    update_memo
     redirect to("/memos/#{params['id']}")
   else
     status 404
@@ -118,8 +118,8 @@ patch '/memos/:id/?' do
 end
 
 delete '/memos/:id/?' do
-  if find_memo(params['id'])
-    delete_memo(params['id'])
+  if find_memo
+    delete_memo
     redirect to('/memos')
   else
     status 404
