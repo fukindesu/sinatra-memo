@@ -13,15 +13,19 @@ STORAGE_PATH = 'memo_files'
 module MemoUtils
   def load_memo_files
     memos = []
-    Dir.glob("#{STORAGE_PATH}/*") do |file|
-      memos << JSON.parse(File.read(file))
+    Dir.glob("#{STORAGE_PATH}/*json") do |filename|
+      memos << JSON.parse(File.read(filename))
     end
     memos.sort_by { |memo| memo['created_at'] }
   end
 
   def find_memo(params)
-    memos = load_memo_files
-    memos.find { |memo| memo['id'] == params['id'] }
+    file_path = to_file_path(params)
+    JSON.parse(File.read(file_path)) if FileTest.exist?(file_path)
+  end
+
+  def to_file_path(params)
+    "#{STORAGE_PATH}/#{params['id']}.json"
   end
 
   def create_memo(params)
