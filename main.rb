@@ -36,8 +36,7 @@ module MemoUtils
         'id' => prepared_id,
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
         'body' => h(params['body']),
-        'created_at' => Time.now.iso8601,
-        'updated_at' => Time.now.iso8601
+        'created_at' => Time.now.iso8601
       }
       JSON.dump(memo, file)
     end
@@ -50,8 +49,7 @@ module MemoUtils
         'id' => params['id'],
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
         'body' => h(params['body']),
-        'created_at' => params['created_at'],
-        'updated_at' => Time.now.iso8601
+        'created_at' => params['created_at']
       }
       JSON.dump(memo, file)
     end
