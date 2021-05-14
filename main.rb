@@ -19,8 +19,8 @@ module MemoUtils
     memos.sort_by { |memo| memo['created_at'] }
   end
 
-  def find_memo(params)
-    file_path = id_to_file_path(params['id'])
+  def find_memo(params_id)
+    file_path = id_to_file_path(params_id)
     JSON.parse(File.read(file_path)) if FileTest.exist?(file_path)
   end
 
@@ -29,10 +29,11 @@ module MemoUtils
   end
 
   def create_memo(params)
-    memo_id = SecureRandom.uuid
-    File.open("#{STORAGE_PATH}/#{memo_id}.json", 'w') do |file|
+    prepared_id = SecureRandom.uuid
+    file_path = id_to_file_path(prepared_id)
+    File.open(file_path, 'w') do |file|
       memo = {
-        'id' => memo_id,
+        'id' => prepared_id,
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
         'body' => h(params['body']),
         'created_at' => Time.now.iso8601,
@@ -43,7 +44,8 @@ module MemoUtils
   end
 
   def update_memo(params)
-    File.open("#{STORAGE_PATH}/#{params['id']}.json", 'w') do |file|
+    file_path = id_to_file_path(params['id'])
+    File.open(file_path, 'w') do |file|
       memo = {
         'id' => params['id'],
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
@@ -55,8 +57,8 @@ module MemoUtils
     end
   end
 
-  def delete_memo(params)
-    file_path = "#{STORAGE_PATH}/#{params['id']}.json"
+  def delete_memo(params_id)
+    file_path = id_to_file_path(params_id)
     FileTest.exist?(file_path) && File.delete(file_path)
   end
 end
@@ -91,7 +93,7 @@ get '/memos/new/?' do
 end
 
 get '/memos/:id/?' do
-  if (@memo = find_memo(params))
+  if (@memo = find_memo(params['id']))
     @page_title = build_page_title('メモの詳細')
     erb :show
   else
@@ -105,7 +107,7 @@ patch '/memos/:id/?' do
 end
 
 get '/memos/:id/edit/?' do
-  if (@memo = find_memo(params))
+  if (@memo = find_memo(params['id']))
     @page_title = build_page_title('メモの変更')
     erb :edit
   else
@@ -114,7 +116,7 @@ get '/memos/:id/edit/?' do
 end
 
 delete '/memos/:id/?' do
-  delete_memo(params)
+  delete_memo(params['id'])
   redirect to('/memos')
 end
 
