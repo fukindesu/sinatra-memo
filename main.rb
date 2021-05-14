@@ -8,11 +8,12 @@ require 'time'
 require 'securerandom'
 
 APP_NAME = 'メモアプリ'
+STORAGE_PATH = 'memo_files'
 
 module MemoUtils
   def load_memo_files
     memos = []
-    Dir.glob('memo_files/*') do |file|
+    Dir.glob("#{STORAGE_PATH}/*") do |file|
       memos << JSON.parse(File.read(file))
     end
     memos.sort_by { |memo| memo['created_at'] }
@@ -25,7 +26,7 @@ module MemoUtils
 
   def create_memo(params)
     memo_id = SecureRandom.uuid
-    File.open("memo_files/#{memo_id}.json", 'w') do |file|
+    File.open("#{STORAGE_PATH}/#{memo_id}.json", 'w') do |file|
       memo = {
         'id' => memo_id,
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
@@ -38,7 +39,7 @@ module MemoUtils
   end
 
   def update_memo(params)
-    File.open("memo_files/#{params['id']}.json", 'w') do |file|
+    File.open("#{STORAGE_PATH}/#{params['id']}.json", 'w') do |file|
       memo = {
         'id' => params['id'],
         'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
@@ -51,7 +52,7 @@ module MemoUtils
   end
 
   def delete_memo(params)
-    file_path = "memo_files/#{params['id']}.json"
+    file_path = "#{STORAGE_PATH}/#{params['id']}.json"
     FileTest.exist?(file_path) && File.delete(file_path)
   end
 end
