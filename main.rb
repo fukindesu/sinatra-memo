@@ -20,7 +20,7 @@ module MemoUtils
   end
 
   def find_memo
-    file_path = id_to_file_path(params['id'])
+    file_path = memo_id_to_file_path(params['id'])
     JSON.parse(File.read(file_path)) if FileTest.exist?(file_path)
   end
 
@@ -34,7 +34,7 @@ module MemoUtils
 
   def create_or_update_memo(creation:)
     memo_id = (creation ? SecureRandom.uuid : params['id'])
-    file_path = id_to_file_path(memo_id)
+    file_path = memo_id_to_file_path(memo_id)
     File.open(file_path, 'w') do |file|
       memo = {
         'id' => memo_id,
@@ -51,7 +51,7 @@ module MemoUtils
   end
 
   def delete_memo
-    file_path = id_to_file_path(params['id'])
+    file_path = memo_id_to_file_path(params['id'])
     FileTest.exist?(file_path) && File.delete(file_path)
   end
 end
