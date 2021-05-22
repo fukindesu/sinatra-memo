@@ -1,0 +1,9 @@
+<h2><%= @memo['title'] %></h2>
+<p class="memo-body"><%= @memo['body'] %></p>
+<div class="button-area">
+  <a href="/memos/<%= @memo['id'] %>/edit" class="button-edit">変更</a>
+  <form action="/memos/<%= @memo['id'] %>" method="POST" class="inline">
+    <input type="hidden" name="_method" value="delete">
+    <button class="button-delete" onclick="return confirm('本当に削除しますか？')">削除</a>
+  </form>
+</div>
