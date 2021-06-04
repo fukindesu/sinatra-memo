@@ -5,6 +5,7 @@ require 'json'
 require 'erb'
 require 'time'
 require 'securerandom'
+require 'sinatra/reloader'
 
 APP_NAME = 'メモアプリ'
 STORAGE_PATH = 'memo_files'
