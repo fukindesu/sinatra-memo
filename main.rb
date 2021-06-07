@@ -12,10 +12,18 @@ APP_NAME = 'メモアプリ'
 STORAGE_PATH = 'memo_files'
 
 module MemoUtils
-  def load_memo_files
+  def load_memos
     memos = []
-    Dir.glob("#{STORAGE_PATH}/*.json", sort: false) do |filename|
-      memos << JSON.parse(File.read(filename))
+    conn = PG.connect(dbname: 'sinatra_memo')
+    conn.exec("select * from memos") do |result|
+      result.each do |row|
+        memos << {
+          'id' => row['id'],
+          'title' => row['title'],
+          'body' => row['body'],
+          'created_at' => row['created_at']
+        }
+      end
     end
     memos.sort_by { |memo| memo['created_at'] }
   end
@@ -71,7 +79,7 @@ get '/' do
 end
 
 get '/memos/?' do
-  @memos = load_memo_files
+  @memos = load_memos
   @page_title = build_page_title(nil)
   erb :index
 end
