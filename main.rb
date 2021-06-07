@@ -29,8 +29,7 @@ module MemoUtils
   end
 
   def find_memo
-    file_path = memo_id_to_file_path(params['id'])
-    JSON.parse(File.read(file_path)) if FileTest.exist?(file_path)
+    load_memos.find { |memo| memo['id'] == params['id'] }
   end
 
   def memo_id_to_file_path(memo_id)
