@@ -12,17 +12,17 @@ create table memos
 
 insert into memos values
 (
-  'df067f62-c218-412b-9c41-3a7e1277957c',
-  'メモ1',
-  'メモの内容\nメモの内容\rメモの内容\r\nメモの内容',
+  '734dcc27-fab2-445a-bc58-895845c61cef',
+  'pg製メモ1',
+  'メモの内容\nメモの内容\rメモの内容\r\nメモの内容\\nメモの内容',
   default
 )
 ;
 
 insert into memos values
 (
-  '632a161b-0c21-4fe5-95e0-bfdc9cd4958f',
-  'メモ2',
+  'e62a2108-febf-4629-925c-5f8491adce07',
+  'pg製メモ2',
   'メモの内容\r\nメモの内容\r\nメモの内容\r\nメモの内容',
   default
 )
@@ -30,8 +30,8 @@ insert into memos values
 
 insert into memos values
 (
-  '9bc3b751-3e81-400a-bb80-3906e64270a3',
-  'メモ3',
+  '003deed3-cf53-4ca2-9ce5-0012f0279d74',
+  'pg製メモ3',
   'メモの内容\r\nメモの内容\r\nメモの内容\r\nメモの内容',
   default
 )
