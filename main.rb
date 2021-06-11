@@ -59,8 +59,8 @@ module MemoUtils
   end
 
   def delete_memo
-    file_path = memo_id_to_file_path(params['id'])
-    FileTest.exist?(file_path) && File.delete(file_path)
+    conn = PG.connect(dbname: 'sinatra_memo')
+    conn.exec("delete from memos where id = '#{params['id']}'")
   end
 end
 
