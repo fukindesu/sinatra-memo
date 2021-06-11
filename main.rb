@@ -37,7 +37,8 @@ module MemoUtils
   end
 
   def create_memo
-    create_or_update_memo
+    conn = PG.connect(dbname: 'sinatra_memo')
+    conn.exec("insert into memos values ('#{SecureRandom.uuid}', '#{params['title']}', '#{params['body']}', default)")
   end
 
   def create_or_update_memo
