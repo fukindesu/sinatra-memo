@@ -56,7 +56,8 @@ module MemoUtils
   end
 
   def update_memo
-    create_or_update_memo
+    conn = PG.connect(dbname: 'sinatra_memo')
+    conn.exec("update memos set title = '#{params['title']}', body = '#{params['body']}' where id = '#{params['id']}'")
   end
 
   def delete_memo
