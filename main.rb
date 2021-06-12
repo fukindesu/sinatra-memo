@@ -15,7 +15,7 @@ module MemoUtils
   def load_memos
     memos = []
     conn = PG.connect(dbname: 'sinatra_memo')
-    conn.exec("select * from memos") do |result|
+    conn.exec('select * from memos') do |result|
       result.each do |row|
         memos << {
           'id' => row['id'],
