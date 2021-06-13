@@ -66,7 +66,9 @@ module MemoUtils
   end
 
   def delete_memo
-    @conn.exec("delete from memos where id = '#{params['id']}'")
+    prepared_name = 'delete_memo'
+    @conn.prepare(prepared_name, 'delete from memos where id = $1')
+    @conn.exec_prepared(prepared_name, [params['id']])
   end
 end
 
