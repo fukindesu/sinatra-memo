@@ -40,7 +40,9 @@ module MemoUtils
   end
 
   def create_memo
-    @conn.exec("insert into memos values ('#{SecureRandom.uuid}', '#{params['title']}', '#{params['body']}', default)")
+    prepared_name = 'create_memo'
+    @conn.prepare(prepared_name, 'insert into memos (id, title, body) values ($1, $2, $3)')
+    @conn.exec_prepared(prepared_name, [SecureRandom.uuid, params['title'], params['body']])
   end
 
   def create_or_update_memo
