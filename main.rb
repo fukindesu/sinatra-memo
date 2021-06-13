@@ -18,15 +18,15 @@ end
 module MemoUtils
   def load_memos
     memos = []
-    @conn.exec('select * from memos') do |result|
-      result.each do |row|
-        memos << {
-          'id' => row['id'],
-          'title' => row['title'],
-          'body' => row['body'],
-          'created_at' => row['created_at']
-        }
-      end
+    prepared_name = 'load_memos'
+    @conn.prepare(prepared_name, 'select * from memos')
+    @conn.exec_prepared(prepared_name).each do |row|
+      memos << {
+        'id' => row['id'],
+        'title' => row['title'],
+        'body' => row['body'],
+        'created_at' => row['created_at']
+      }
     end
     memos.sort_by { |memo| memo['created_at'] }
   end
