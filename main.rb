@@ -60,7 +60,9 @@ module MemoUtils
   end
 
   def update_memo
-    @conn.exec("update memos set title = '#{params['title']}', body = '#{params['body']}' where id = '#{params['id']}'")
+    prepared_name = 'update_memo'
+    @conn.prepare(prepared_name, 'update memos set title = $1, body = $2 where id = $3')
+    @conn.exec_prepared(prepared_name, [params['title'], params['body'], params['id']])
   end
 
   def delete_memo
