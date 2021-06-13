@@ -11,11 +11,14 @@ require 'pg'
 APP_NAME = 'メモアプリ'
 STORAGE_PATH = 'memo_files'
 
+before do
+  @conn = PG.connect(dbname: 'sinatra_memo')
+end
+
 module MemoUtils
   def load_memos
     memos = []
-    conn = PG.connect(dbname: 'sinatra_memo')
-    conn.exec('select * from memos') do |result|
+    @conn.exec('select * from memos') do |result|
       result.each do |row|
         memos << {
           'id' => row['id'],
@@ -37,8 +40,7 @@ module MemoUtils
   end
 
   def create_memo
-    conn = PG.connect(dbname: 'sinatra_memo')
-    conn.exec("insert into memos values ('#{SecureRandom.uuid}', '#{params['title']}', '#{params['body']}', default)")
+    @conn.exec("insert into memos values ('#{SecureRandom.uuid}', '#{params['title']}', '#{params['body']}', default)")
   end
 
   def create_or_update_memo
@@ -56,13 +58,11 @@ module MemoUtils
   end
 
   def update_memo
-    conn = PG.connect(dbname: 'sinatra_memo')
-    conn.exec("update memos set title = '#{params['title']}', body = '#{params['body']}' where id = '#{params['id']}'")
+    @conn.exec("update memos set title = '#{params['title']}', body = '#{params['body']}' where id = '#{params['id']}'")
   end
 
   def delete_memo
-    conn = PG.connect(dbname: 'sinatra_memo')
-    conn.exec("delete from memos where id = '#{params['id']}'")
+    @conn.exec("delete from memos where id = '#{params['id']}'")
   end
 end
 
