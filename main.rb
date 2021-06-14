@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 
 require 'sinatra'
-require 'json'
 require 'erb'
-require 'time'
 require 'securerandom'
 require 'sinatra/reloader'
 require 'pg'
 
 APP_NAME = 'メモアプリ'
-STORAGE_PATH = 'memo_files'
 
 before do
   @conn = PG.connect(dbname: 'sinatra_memo')
