@@ -1,19 +1,20 @@
-# Sinatraメモアプリ（ファイル保存編） README
+# Sinatraメモアプリ（PostgreSQL編） README
 
 ---
 
 ## 【はじめに】このアプリケーションについて
 
 SinatraとWebブラウザを用いた簡易メモアプリケーションです。  
-メモの保存にはJSONファイルを使用しています（1メモ1ファイル）。
+メモの保存には「PostgreSQL」を使用しています。
 
 ![](https://i.gyazo.com/188f07aa7786ed31b098459ea99a607f.png)
 
 以下の環境で開発・動作確認を行いました。
 
-- OS … macOS Big Sur 11.3.1
+- OS … macOS Big Sur 11.4
 - Ruby … 3.0.1p64 (2021-04-05 revision 0fb782ee38)
-- Webブラウザ … Google Chrome 90.0.4430.93
+- PostgreSQL … 13.3
+- Webブラウザ … Google Chrome 91.0.4472.101
 
 ---
 
@@ -28,6 +29,37 @@ SinatraとWebブラウザを用いた簡易メモアプリケーションです�
 % cd sinatra-memo
 
 % bundle
+```
+
+## PostgreSQLの設定
+
+psqlコマンドを用いて、以下のデータベースとテーブルを作成してください。  
+（該当のアプリケーションコードを書き換えていただくことで、任意のデータベース名とテーブル名への変更も可能です）
+
+```sql
+-- データベース `sinatra_memo` を作成
+create database sinatra_memo;
+```
+
+```bash
+# データベース `sinatra_memo` に接続
+\c sinatra_memo
+```
+
+```sql
+-- テーブル `memos` を作成
+create table memos
+(
+  id char(36) primary key,
+  title varchar(1000),
+  body varchar(10000),
+  created_at timestamp default current_timestamp
+);
+```
+
+```bash
+# psqlを終了
+\q
 ```
 
 ## アプリケーションの起動
