@@ -32,10 +32,6 @@ module MemoUtils
     load_memos.find { |memo| memo['id'] == params['id'] }
   end
 
-  def memo_id_to_file_path(memo_id)
-    "#{STORAGE_PATH}/#{memo_id}.json"
-  end
-
   def create_memo
     prepared_name = 'create_memo'
     values = values_for_create_or_update
