@@ -41,28 +41,24 @@ module MemoUtils
 
   def create_memo
     prepared_name = 'create_memo'
+    values = values_for_create_or_update
     @conn.prepare(prepared_name, 'insert into memos (id, title, body) values ($1, $2, $3)')
-    @conn.exec_prepared(prepared_name, [SecureRandom.uuid, params['title'], params['body']])
+    @conn.exec_prepared(prepared_name, [values['id'], values['title'], values['body']])
   end
 
-  def create_or_update_memo
-    memo_id = params['id'] || SecureRandom.uuid
-    file_path = memo_id_to_file_path(memo_id)
-    File.open(file_path, 'w') do |file|
-      memo = {
-        'id' => memo_id,
-        'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
-        'body' => h(params['body']),
-        'created_at' => params['created_at'] || Time.now.iso8601
-      }
-      JSON.dump(memo, file)
-    end
+  def values_for_create_or_update
+    {
+      'id' => params['id'] || SecureRandom.uuid,
+      'title' => (title = h(params['title']).strip).empty? ? '無題' : title,
+      'body' => h(params['body'])
+    }
   end
 
   def update_memo
     prepared_name = 'update_memo'
+    values = values_for_create_or_update
     @conn.prepare(prepared_name, 'update memos set title = $1, body = $2 where id = $3')
-    @conn.exec_prepared(prepared_name, [params['title'], params['body'], params['id']])
+    @conn.exec_prepared(prepared_name, [values['title'], values['body'], values['id']])
   end
 
   def delete_memo
