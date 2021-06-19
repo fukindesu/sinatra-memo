@@ -31,7 +31,10 @@ module MemoUtils
   end
 
   def find_memo
-    load_memos.find { |memo| memo['id'] == params['id'] }
+    prepared_name = 'find_memo'
+    @conn.prepare(prepared_name, 'select * from memos where id = $1')
+    memos_by_db = @conn.exec_prepared(prepared_name, [params['id']])
+    memos_by_db.map(&:to_h).find { |memo| memo['id'] == params['id'] }
   end
 
   def create_memo
