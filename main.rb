@@ -9,10 +9,14 @@ require 'pg'
 APP_NAME = 'メモアプリ'
 
 before do
-  @conn = PG.connect(dbname: 'sinatra_memo')
+  @conn = connect_db
 end
 
 module MemoUtils
+  def connect_db
+    PG.connect(dbname: 'sinatra_memo')
+  end
+
   def load_memos
     memos = []
     prepared_name = 'load_memos'
