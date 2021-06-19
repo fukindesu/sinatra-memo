@@ -19,9 +19,8 @@ module MemoUtils
 
   def load_memos
     memos = []
-    prepared_name = 'load_memos'
-    @conn.prepare(prepared_name, 'select * from memos')
-    @conn.exec_prepared(prepared_name).each do |row|
+    sql = 'select * from memos order by created_at'
+    @conn.exec(sql).each do |row|
       memos << {
         'id' => row['id'],
         'title' => row['title'],
@@ -29,7 +28,6 @@ module MemoUtils
         'created_at' => row['created_at']
       }
     end
-    memos.sort_by { |memo| memo['created_at'] }
   end
 
   def find_memo
