@@ -19,8 +19,7 @@ module MemoUtils
 
   def load_memos
     memos = []
-    sql = 'select * from memos order by created_at'
-    @conn.exec(sql).each do |row|
+    @conn.exec('select * from memos order by created_at').each do |row|
       memos << {
         'id' => row['id'],
         'title' => row['title'],
