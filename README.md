@@ -20,11 +20,10 @@ SinatraとWebブラウザを用いた簡易メモアプリケーションです�
 
 ## アプリケーションの入手
 
-任意のディレクトリで以下のGitHubリポジトリをcloneした後、リポジトリのルートディレクトリへ移動して`bundle`を実行してください。  
-（mainブランチではなく開発ブランチをcloneしていただくため、コマンドラインに「`-b develop`」を付加しています）
+任意のディレクトリで以下のGitHubリポジトリをcloneした後、リポジトリのルートディレクトリへ移動して`bundle`を実行してください。
 
 ```bash
-% git clone https://github.com/fukindesu/sinatra-memo.git -b develop
+% git clone https://github.com/fukindesu/sinatra-memo.git
 
 % cd sinatra-memo
 
